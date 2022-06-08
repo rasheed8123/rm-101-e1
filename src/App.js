@@ -1,11 +1,11 @@
-import Taskapp from "./components/TaskApp"
-import tasks from "./data/tasks.json";
 import React from "react";
+import task from './data/tasks.json'
+import TaskApp from './components/TaskApp'
 function App() {
   return <div>
-  <Taskapp data={tasks}></Taskapp>
-  
-  </div>;
+    <TaskApp data={task}/>
+    {/* Code Here */}
+    </div>;
 }
 
 export default App;

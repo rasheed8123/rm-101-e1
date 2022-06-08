@@ -1,57 +1,53 @@
 import React from "react";
-import { v4 } from "uuid";
+import { useState } from 'react'
+import { v4 } from 'uuid';
+import  AddTask  from './AddTask/AddTask'
 import styles from "./taskApp.module.css";
-import { AddTask } from "./AddTask";
-import { Tasks } from "./Tasks";
-import { TaskHeader } from "./TaskHeader";
+import  Tasks  from './Tasks/Tasks'
+import  TaskHeader  from "./TaskHeader/TaskHeader";
 
-const TaskApp = ({ data }) => {
-  // NOTE: do not delete `data-testid` key value pair
 
-  const [tasks, setTasks] = React.useState(data);
-
-  const addTask = (newTask) => {
-    if (newTask && !tasks.some((task) => task.text === newTask)) {
-      const newTaskObj = {
-        id: v4(),
-        text: newTask,
-        done: false,
-        count: 1,
+const TaskApp = ({data}) => {
+  const[task,setTask] = useState(data)
+  const addTask = (newTask) =>{
+    if(newTask && !task.some((e)=> e.text===newTask)){
+      var newObj = {
+        id: v4(2),
+        text : newTask,
+        done : false,
+        count:1,
       };
-      setTasks([...tasks, newTaskObj]);
+      setTask([...task,newObj])
     }
-  };
+    
+  }
 
-  const handleRemoveTask = (taskId) => {
-    let newTasks = tasks.filter((task) => task.id !== taskId);
-    console.log(newTasks);
-    setTasks(newTasks);
-  };
+  const handleRemove=(taskId)=>{
+    let newTask = task.filter((task)=> task.id !== taskId);
+    setTask(newTask);
+  }
 
-  const handleUpdateTask = (updatedTask) => {
-    let newTasks = tasks.reduce((acc, crr) => {
-      if (crr.id === updatedTask.id) {
+  const handleUpdate = (updatedTask) =>{
+    let newTask = task.reduce((acc,crr)=>{
+      if(crr.id === updatedTask.id){
         acc.push(updatedTask);
-      } else {
-        acc.push(crr);
+      }else{
+        acc.push(crr)
       }
       return acc;
-    }, []);
-    setTasks([...newTasks]);
-  };
+    },[]);
+    setTask([...newTask]);
+  }
 
+  // NOTE: do not delete `data-testid` key value pair
   return (
     <div data-testid="task-app" className={styles.taskApp}>
       {/* Header */}
-      <TaskHeader tasks={tasks}/>
+      <TaskHeader task={task}/>
+      <AddTask addTask={addTask}/>
       {/* Add Task */}
-      <AddTask addTask={addTask} />
+      <Tasks task={task} handleRemove={handleRemove} handleUpdate={handleUpdate}/>
       {/* Tasks */}
-      <Tasks
-            tasks={tasks}
-            handleRemoveTask={handleRemoveTask}
-            handleUpdateTask={handleUpdateTask}
-          />
     </div>
   );
 };
